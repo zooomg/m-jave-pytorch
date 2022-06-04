@@ -20,7 +20,6 @@ from resnet_JAVE import resnet152
 class M_JAVE(nn.Module):
     def __init__(self, bert_name, config):
         super(M_JAVE, self).__init__()
-        self.bert = BertModel.from_pretrained(bert_name)
         self.txt_hidden_size = config['txt_hidden_size']
         self.img_hidden_size = config['img_hidden_size']
         self.attention_size = config['attn_size']
@@ -31,6 +30,11 @@ class M_JAVE(nn.Module):
         
         self.test = config['test']
         
+        self.bert = BertModel.from_pretrained(bert_name)
+        for param in self.bert.parameters():
+            param.requires_grad = False
+        print('load pretrained BERT')
+
         self.pre_resnet = resnet152()
         self.pre_resnet.load_state_dict(torch.load('./pth/resnet152-b121ed2d.pth'))
         print('load pretrained resnet152')
