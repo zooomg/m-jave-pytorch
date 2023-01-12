@@ -261,6 +261,7 @@ class M_JAVE(nn.Module):
         d9 = self.dropout9(d9)
         d10 = self.linear10(preds_label) # (batch, attn_hidden_size)
         d10 = self.dropout10(d10)
+        d10 = d10.unsqueeze(1) # (batch, 1, attn_hidden_size)
         logits_seq = self.logit_linear(d8 + d9 + d10 + hidden_img2) # (batch, seq_len, vocab_size_bio)
         if self.test:
             print('d8: ', d8)
